@@ -113,6 +113,7 @@
         /* Content area styles */
         .content-area {
             margin-left: 250px;       /* Push content so it doesn’t overlap */
+            padding: 2rem;
             flex-grow: 1;
             /* Removed overflow-y: auto; to allow body to scroll */
             background-color: var(--background-light);
@@ -234,7 +235,7 @@
         .content-area main { /* Targeting the <main> element within .content-area */
             max-width: 1200px; /* Adjust as needed for desired content width */
             margin: 0 auto; /* Center the main content */
-            padding: 2rem; /* Add padding here as content-area no longer has it */
+            padding-top: 0; /* Header already handles spacing */
         }
 
         /* Card component styling */
@@ -535,12 +536,9 @@
             box-shadow: var(--box-shadow-light);
             max-width: 600px; /* Wider modal for forms */
             width: 90%;
-            /* Removed fixed height/max-height for content, let modal-body handle it */
             transform: translateY(-20px);
             transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease; /* Dark mode transition */
             position: relative;
-            display: flex; /* Flex container for title, scrollable body, and button */
-            flex-direction: column; /* Stack children vertically */
         }
 
         .modal.visible .modal-content {
@@ -577,14 +575,6 @@
             text-align: center;
         }
 
-        /* New style for scrollable modal body */
-        .modal-body-scrollable {
-            max-height: 70vh; /* Adjust as needed, e.g., 70% of viewport height */
-            overflow-y: auto; /* Enable vertical scrolling */
-            padding-right: 15px; /* Space for scrollbar */
-            margin-bottom: 1rem; /* Space before the submit button */
-        }
-        
         /* Chart container styling */
         .chart-container {
             background-color: var(--card-background);
@@ -668,10 +658,7 @@
             }
             .content-area {
                 margin-left: 0; /* Content takes full width on mobile */
-                /* Removed padding here */
-            }
-            .content-area main {
-                padding: 1rem; /* Add padding to main content on mobile */
+                padding: 1rem;
             }
             header {
                 flex-direction: column;
@@ -732,11 +719,6 @@
             .content-overlay.visible {
                 display: block;
             }
-
-            /* Responsive adjustments for modal-body-scrollable */
-            .modal-body-scrollable {
-                max-height: 60vh; /* Adjust max height for smaller screens */
-            }
         }
     </style>
 </head>
@@ -757,81 +739,79 @@
         <div class="modal-content">
             <button class="modal-close-btn" onclick="closeEmployeeModal()"><i class="fas fa-times"></i></button>
             <h3 id="employee-modal-title">Add New Employee</h3>
-            <div class="modal-body-scrollable"> <!-- New scrollable container -->
-                <form id="employee-form">
-                    <input type="hidden" id="employee-id-field"> <!-- Hidden field for employee ID in edit mode -->
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="modal-emp-name">Full Name</label>
-                            <input type="text" id="modal-emp-name" placeholder="Employee Name" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="modal-emp-dob">Date of Birth</label>
-                            <input type="date" id="modal-emp-dob" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="modal-emp-gender">Gender</label>
-                            <select id="modal-emp-gender" required>
-                                <option value="">Select Gender</option>
-                                <option value="Male">Male</option>
-                                <option value="Female">Female</option>
-                                <option value="Other">Other</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="modal-emp-contact">Contact (Phone/Email)</label>
-                            <input type="text" id="modal-emp-contact" placeholder="+2547XXXXXXXX / email@example.com" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="modal-emp-id">National ID No</label>
-                            <input type="text" id="modal-emp-id" placeholder="ID Number" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="modal-emp-kra">KRA PIN</label>
-                            <input type="text" id="modal-emp-kra" placeholder="A123456789B" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="modal-emp-nhif">NHIF Number</label>
-                            <input type="text" id="modal-emp-nhif" placeholder="NHIF Number" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="modal-emp-nssf">NSSF Number</label>
-                            <input type="text" id="modal-emp-nssf" placeholder="NSSF Number" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="modal-emp-department">Department</label>
-                            <input type="text" id="modal-emp-department" placeholder="e.g., HR, IT, Finance" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="modal-emp-designation">Designation</label>
-                            <input type="text" id="modal-emp-designation" placeholder="e.g., Software Dev, Manager" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="modal-emp-hiredate">Hire Date</label>
-                            <input type="date" id="modal-emp-hiredate" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="modal-emp-salary">Salary Scale (Ksh)</label>
-                            <input type="number" id="modal-emp-salary" placeholder="e.g., 85000" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="modal-emp-status">Employee Status</label>
-                            <select id="modal-emp-status" required>
-                                <option value="Active">Active</option>
-                                <option value="On Leave">On Leave</option>
-                                <option value="Terminated">Terminated</option>
-                                <option value="Suspended">Suspended</option>
-                            </select>
-                        </div>
-                         <div class="form-group">
-                            <label for="modal-emp-docs">Document Uploads (Simulated)</label>
-                            <input type="file" id="modal-emp-docs" multiple>
-                            <small>Contract, certificates, IDs</small>
-                        </div>
+            <form id="employee-form">
+                <input type="hidden" id="employee-id-field"> <!-- Hidden field for employee ID in edit mode -->
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="modal-emp-name">Full Name</label>
+                        <input type="text" id="modal-emp-name" placeholder="Employee Name" required>
                     </div>
-                    <button type="submit" class="primary main-action-btn"><i class="fas fa-save"></i> Save Employee</button>
-                </form>
-            </div>
+                    <div class="form-group">
+                        <label for="modal-emp-dob">Date of Birth</label>
+                        <input type="date" id="modal-emp-dob" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="modal-emp-gender">Gender</label>
+                        <select id="modal-emp-gender" required>
+                            <option value="">Select Gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="modal-emp-contact">Contact (Phone/Email)</label>
+                        <input type="text" id="modal-emp-contact" placeholder="+2547XXXXXXXX / email@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="modal-emp-id">National ID No</label>
+                        <input type="text" id="modal-emp-id" placeholder="ID Number" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="modal-emp-kra">KRA PIN</label>
+                        <input type="text" id="modal-emp-kra" placeholder="A123456789B" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="modal-emp-nhif">NHIF Number</label>
+                        <input type="text" id="modal-emp-nhif" placeholder="NHIF Number" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="modal-emp-nssf">NSSF Number</label>
+                        <input type="text" id="modal-emp-nssf" placeholder="NSSF Number" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="modal-emp-department">Department</label>
+                        <input type="text" id="modal-emp-department" placeholder="e.g., HR, IT, Finance" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="modal-emp-designation">Designation</label>
+                        <input type="text" id="modal-emp-designation" placeholder="e.g., Software Dev, Manager" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="modal-emp-hiredate">Hire Date</label>
+                        <input type="date" id="modal-emp-hiredate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="modal-emp-salary">Salary Scale (Ksh)</label>
+                        <input type="number" id="modal-emp-salary" placeholder="e.g., 85000" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="modal-emp-status">Employee Status</label>
+                        <select id="modal-emp-status" required>
+                            <option value="Active">Active</option>
+                            <option value="On Leave">On Leave</option>
+                            <option value="Terminated">Terminated</option>
+                            <option value="Suspended">Suspended</option>
+                        </select>
+                    </div>
+                     <div class="form-group">
+                        <label for="modal-emp-docs">Document Uploads (Simulated)</label>
+                        <input type="file" id="modal-emp-docs" multiple>
+                        <small>Contract, certificates, IDs</small>
+                    </div>
+                </div>
+                <button type="submit" class="primary main-action-btn"><i class="fas fa-save"></i> Save Employee</button>
+            </form>
         </div>
     </div>
 
@@ -849,6 +829,7 @@
         <form id="login-form">
             <select id="user-role" required>
                 <option value="">Select Role</option>
+                <!-- Removed Admin role option -->
                 <option value="hr">HR Manager</option>
                 <option value="employee">Employee</option>
             </select>
@@ -898,9 +879,8 @@
                     <p>Welcome to your HR & Payroll Dashboard, <span id="current-user-name"></span>!</p>
 
                     <h3 class="section-header">Quick Insights</h3>
-                    
-                    <!-- Employee-specific Quick Insights -->
                     <div class="info-grid" id="employee-dashboard-insights">
+                        <!-- Employee-specific quick stats will go here -->
                         <div class="info-card">
                             <h3>Leave Balance</h3>
                             <p><span id="emp-leave-balance">0</span> days left</p>
@@ -916,26 +896,6 @@
                         <div class="info-card">
                             <h3>Active Loans/Advances</h3>
                             <p>Ksh <span id="emp-active-loans">0.00</span></p>
-                        </div>
-                    </div>
-
-                    <!-- HR/Admin Specific Quick Insights -->
-                    <div class="info-grid hidden" id="hr-dashboard-insights">
-                        <div class="info-card">
-                            <h3>Total Employees</h3>
-                            <p><span id="total-employees">0</span></p>
-                        </div>
-                        <div class="info-card">
-                            <h3>Present Today</h3>
-                            <p><span id="employees-present-today">0</span></p>
-                        </div>
-                        <div class="info-card">
-                            <h3>Pending Leave Requests</h3>
-                            <p><span id="pending-leave-requests">0</span></p>
-                        </div>
-                        <div class="info-card">
-                            <h3>Total Payroll Cost (This Month)</h3>
-                            <p>Ksh <span id="total-payroll-cost">0.00</span></p>
                         </div>
                     </div>
 
@@ -988,7 +948,7 @@
                             <input type="text" id="profile-gender" readonly>
                         </div>
                         <div class="form-group">
-                            <label for="profile-contact">Contact (Phone/Email):</label>
+                            <label>Contact (Phone/Email):</label>
                             <input type="text" id="profile-contact" class="editable-field">
                         </div>
                         <div class="form-group">
@@ -1317,7 +1277,9 @@
                     </ul>
 
                     <h3 class="section-header">Data Management Strategy</h3>
-                
+                    <p>Current (Prototype): **LocalStorage** is used to simulate data persistence for the current browser session.</p>
+                    <p>Next Stage (Upgrade): **Firebase (Auth, Firestore DB, Cloud Functions)** for scalable backend and authentication.</p>
+                    <p>Enterprise Stage: **Supabase or custom backend (Postgres + API)** for advanced requirements.</p>
                 </div>
 
             </main>
@@ -1809,52 +1771,51 @@
 
             // First, hide all elements that might be role-specific to reset state
             document.querySelector('#employees-section .primary')?.classList.add('hidden'); // Add Employee button
-            document.getElementById('leave-requests-title').classList.add('hidden');
+            document.getElementById('leave-requests-title')?.classList.add('hidden');
             document.getElementById('leave-requests-table')?.closest('.table-container')?.classList.add('hidden');
-            document.getElementById('payroll-section').classList.add('hidden'); // Entire payroll section hidden by default
-            document.getElementById('reports-section').classList.add('hidden');
-            document.getElementById('integrations-section').classList.add('hidden');
+            document.getElementById('payroll-section')?.classList.add('hidden'); // Entire payroll section hidden by default
+            document.getElementById('reports-section')?.classList.add('hidden');
+            document.getElementById('integrations-section')?.classList.add('hidden');
 
-            // Hide both insight grids by default
-            document.getElementById('employee-dashboard-insights').classList.add('hidden');
-            document.getElementById('hr-dashboard-insights').classList.add('hidden');
-            
-            // Hide dashboard charts section by default
-            document.getElementById('dashboard-section').querySelector('h3.section-header:last-of-type').classList.add('hidden');
-            document.getElementById('dashboard-section').querySelector('.info-grid:last-of-type').classList.add('hidden');
+            // Hide/show dashboard insight grids
+            document.getElementById('employee-dashboard-insights')?.classList.add('hidden');
+            // Re-use existing spans for admin/hr insights in dashboard-section HTML.
+            // These would ideally be in a separate container for clear separation, but for now, we'll hide them.
+            document.getElementById('dashboard-section')?.querySelectorAll('.info-card').forEach(card => card.classList.add('hidden'));
 
 
             // Leave section specific toggles
-            document.getElementById('leave-balances-grid').classList.remove('hidden'); // Default to showing employee balances
-            document.getElementById('apply-leave-title').classList.remove('hidden');
-            document.getElementById('leave-request-form').classList.remove('hidden');
-            document.getElementById('my-leave-history-title').classList.remove('hidden');
-            document.getElementById('my-leave-history-table')?.closest('.table-container').classList.remove('hidden');
-            document.getElementById('leave-balances-title').textContent = 'My Leave Balances';
-            document.getElementById('apply-leave-title').textContent = 'Apply for Leave';
+            document.getElementById('leave-balances-grid')?.classList.remove('hidden'); // Default to showing employee balances
+            document.getElementById('apply-leave-title')?.classList.remove('hidden');
+            document.getElementById('leave-request-form')?.classList.remove('hidden');
+            document.getElementById('my-leave-history-title')?.classList.remove('hidden');
+            document.getElementById('my-leave-history-table')?.closest('.table-container')?.classList.remove('hidden');
+            if (document.getElementById('leave-balances-title')) document.getElementById('leave-balances-title').textContent = 'My Leave Balances';
+            if (document.getElementById('apply-leave-title')) document.getElementById('apply-leave-title').textContent = 'Apply for Leave';
 
 
             switch (role) {
                 case 'hr': // Combined logic for HR, as 'admin' is removed
-                    document.querySelector('#employees-section .primary').classList.remove('hidden'); // Show Add Employee button
-                    document.getElementById('employees-section').classList.remove('hidden');
-                    document.getElementById('payroll-section').classList.remove('hidden'); // HR can see payroll
-                    document.getElementById('reports-section').classList.remove('hidden'); // HR can see reports
-                    document.getElementById('integrations-section').classList.remove('hidden'); // HR/Admin can see integrations
-                    document.getElementById('notifications-section').classList.remove('hidden'); // HR/Admin see all notifications
+                    document.querySelector('#employees-section .primary')?.classList.remove('hidden'); // Show Add Employee button
+                    document.getElementById('employees-section')?.classList.remove('hidden');
+                    document.getElementById('payroll-section')?.classList.remove('hidden'); // HR can see payroll
+                    document.getElementById('reports-section')?.classList.remove('hidden'); // HR can see reports
+                    document.getElementById('integrations-section')?.classList.remove('hidden'); // HR/Admin can see integrations
+                    document.getElementById('notifications-section')?.classList.remove('hidden'); // HR/Admin see all notifications
 
-                    // Show HR/Admin specific dashboard insights and charts
+                    // Show HR/Admin specific dashboard insights
                     if (sectionId === 'dashboard-section') {
-                        document.getElementById('hr-dashboard-insights').classList.remove('hidden'); // Show HR insights
+                        // Show all 4 HR/Admin insight cards
+                        totalEmployeesSpan?.closest('.info-card')?.classList.remove('hidden');
+                        employeesPresentTodaySpan?.closest('.info-card')?.classList.remove('hidden');
+                        pendingLeaveRequestsSpan?.closest('.info-card')?.classList.remove('hidden');
+                        totalPayrollCostSpan?.closest('.info-card')?.classList.remove('hidden');
                         updateDashboardInsights(); // Populate with data
-                        document.getElementById('dashboard-section').querySelector('h3.section-header:last-of-type').classList.remove('hidden'); // Show Analytics & Trends header
-                        document.getElementById('dashboard-section').querySelector('.info-grid:last-of-type').classList.remove('hidden'); // Show Charts grid
-                        renderCharts(); // Render charts for HR/Admin dashboard
                     }
                     
                     // Show HR specific leave sections
-                    document.getElementById('leave-requests-title').classList.remove('hidden');
-                    document.getElementById('leave-requests-table').closest('.table-container').classList.remove('hidden');
+                    document.getElementById('leave-requests-title')?.classList.remove('hidden');
+                    document.getElementById('leave-requests-table')?.closest('.table-container')?.classList.remove('hidden');
                     
                     if (sectionId === 'employees-section') {
                         populateEmployeeTable();
@@ -1863,13 +1824,13 @@
                     } else if (sectionId === 'payroll-section') {
                         // Ensure payroll processing UI is visible for HR/Admin
                         document.getElementById('payroll-section').querySelector('.section-title').textContent = 'Payroll Processing';
-                        document.getElementById('process-payroll-btn').classList.remove('hidden');
-                        document.getElementById('payroll-status').classList.remove('hidden');
-                        document.getElementById('payroll-section').querySelector('h3.section-header').classList.remove('hidden'); // Show "Process Monthly Payroll" header
-                        document.getElementById('payroll-month-input').closest('.form-grid').classList.remove('hidden'); // Show month input for processing
+                        document.getElementById('process-payroll-btn')?.classList.remove('hidden');
+                        document.getElementById('payroll-status')?.classList.remove('hidden');
+                        document.getElementById('payroll-section')?.querySelector('h3.section-header')?.classList.remove('hidden'); // Show "Process Monthly Payroll" header
+                        document.getElementById('payroll-month-input')?.closest('.form-grid')?.classList.remove('hidden'); // Show month input for processing
 
                         populatePayrollSummaryTable();
-                        payrollStatus.textContent = `Last processed: ${loadData('lastProcessedPayrollMonth', 'Never')}`;
+                        if (payrollStatus) payrollStatus.textContent = `Last processed: ${loadData('lastProcessedPayrollMonth', 'Never')}`;
                     } else if (sectionId === 'attendance-section') {
                         // HR/Admin would see an overview of all employee attendance, here we show Jane Smith's data as example for prototype
                         populateAttendanceHistoryTable('EMP002');
@@ -1878,29 +1839,37 @@
                     }
 
                     // Hide employee-specific leave forms as HR manages all
-                    document.getElementById('leave-balances-grid').classList.add('hidden');
-                    document.getElementById('apply-leave-title').classList.add('hidden');
-                    document.getElementById('leave-request-form').classList.add('hidden');
-                    document.getElementById('my-leave-history-title').classList.add('hidden');
-                    document.getElementById('my-leave-history-table').closest('.table-container').classList.add('hidden');
+                    document.getElementById('leave-balances-grid')?.classList.add('hidden');
+                    document.getElementById('apply-leave-title')?.classList.add('hidden');
+                    document.getElementById('leave-request-form')?.classList.add('hidden');
+                    document.getElementById('my-leave-history-title')?.classList.add('hidden');
+                    document.getElementById('my-leave-history-table')?.closest('.table-container')?.classList.add('hidden');
 
-                    document.getElementById('leave-balances-title').textContent = 'All Leave Balances'; // HR/Admin sees all
-                    document.getElementById('apply-leave-title').textContent = 'Manage Leave Requests'; // HR/Admin manages
+                    if (document.getElementById('leave-balances-title')) document.getElementById('leave-balances-title').textContent = 'All Leave Balances'; // HR/Admin sees all
+                    if (document.getElementById('apply-leave-title')) document.getElementById('apply-leave-title').textContent = 'Manage Leave Requests'; // HR/Admin manages
+
+                    renderCharts(); // Render charts for HR/Admin dashboard
                     break;
 
                 case 'employee':
                     // Explicitly hide HR/Admin specific sections
-                    document.getElementById('employees-section').classList.add('hidden');
-                    document.getElementById('payroll-section').classList.add('hidden'); // Only show employee payslips view, not processing
-                    document.getElementById('reports-section').classList.add('hidden');
-                    document.getElementById('integrations-section').classList.add('hidden');
+                    document.getElementById('employees-section')?.classList.add('hidden');
+                    document.getElementById('payroll-section')?.classList.add('hidden'); // Only show employee payslips view, not processing
+                    document.getElementById('reports-section')?.classList.add('hidden');
+                    document.getElementById('integrations-section')?.classList.add('hidden');
 
                     // Show employee-specific dashboard insights
                     if (sectionId === 'dashboard-section') {
-                         document.getElementById('employee-dashboard-insights').classList.remove('hidden'); // Show employee insights
+                         document.getElementById('employee-dashboard-insights')?.classList.remove('hidden');
+                         // Show employee specific insight cards (assumes they are children of employee-dashboard-insights)
+                         document.getElementById('employee-dashboard-insights')?.querySelectorAll('.info-card').forEach(card => card.classList.remove('hidden'));
                          updateEmployeeDashboardInsights(currentUser.empId); // Populate employee dashboard cards
+                         // Hide the Charts section from employee dashboard
+                         document.getElementById('dashboard-section')?.querySelector('h3.section-header:last-of-type')?.classList.add('hidden');
+                         document.getElementById('dashboard-section')?.querySelector('.info-grid:last-of-type')?.classList.add('hidden');
+
                     } else if (sectionId === 'notifications-section') {
-                        document.getElementById('notifications-section').classList.remove('hidden');
+                        document.getElementById('notifications-section')?.classList.remove('hidden');
                         renderNotifications(); // Ensure notifications are rendered for employee
                     } else if (sectionId === 'attendance-section') {
                         updateCurrentAttendanceStatus(currentUser.empId);
@@ -1911,12 +1880,12 @@
                         populateEmployeeLeaveBalances(currentUser.empId);
                         populateMyLeaveHistoryTable(currentUser.empId);
                     } else if (sectionId === 'payroll-section') { // This is "My Payslips" for employee
-                        document.getElementById('payroll-section').classList.remove('hidden'); // Show it now for employee
+                        document.getElementById('payroll-section')?.classList.remove('hidden'); // Show it now for employee
                         document.getElementById('payroll-section').querySelector('.section-title').textContent = 'My Payslips';
-                        document.getElementById('process-payroll-btn').classList.add('hidden'); // Hide process button
-                        document.getElementById('payroll-status').classList.add('hidden'); // Hide payroll status
-                        document.getElementById('payroll-section').querySelector('h3.section-header').classList.add('hidden'); // Hide "Process Monthly Payroll" header
-                        document.getElementById('payroll-month-input').closest('.form-grid').classList.add('hidden'); // Hide month input for processing
+                        document.getElementById('process-payroll-btn')?.classList.add('hidden'); // Hide process button
+                        document.getElementById('payroll-status')?.classList.add('hidden'); // Hide payroll status
+                        document.getElementById('payroll-section')?.querySelector('h3.section-header')?.classList.add('hidden'); // Hide "Process Monthly Payroll" header
+                        document.getElementById('payroll-month-input')?.closest('.form-grid')?.classList.add('hidden'); // Hide month input for processing
 
                         populatePayrollSummaryTable(currentUser.empId);
                     } else if (sectionId === 'profile-section') {
@@ -1938,18 +1907,18 @@
             if (!employee) return;
 
             // Leave Balance
-            empLeaveBalanceSpan.textContent = '15'; // Hardcoded for now, would fetch from leave data
+            if (empLeaveBalanceSpan) empLeaveBalanceSpan.textContent = '15'; // Hardcoded for now, would fetch from leave data
 
             // Last Payslip
             const latestPayslip = payslips
                 .filter(ps => ps.empId === empId)
                 .sort((a, b) => new Date(b.month) - new Date(a.month))[0];
             if (latestPayslip) {
-                empLastPayslipMonthSpan.textContent = latestPayslip.month;
-                empLastPayslipNetSpan.textContent = latestPayslip.netPay.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                if (empLastPayslipMonthSpan) empLastPayslipMonthSpan.textContent = latestPayslip.month;
+                if (empLastPayslipNetSpan) empLastPayslipNetSpan.textContent = latestPayslip.netPay.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
             } else {
-                empLastPayslipMonthSpan.textContent = 'N/A';
-                empLastPayslipNetSpan.textContent = '0.00';
+                if (empLastPayslipMonthSpan) empLastPayslipMonthSpan.textContent = 'N/A';
+                if (empLastPayslipNetSpan) empLastPayslipNetSpan.textContent = '0.00';
             }
 
             // Attendance This Month
@@ -1957,13 +1926,13 @@
             const daysPresentThisMonth = attendanceRecords.filter(rec => 
                 rec.empId === empId && rec.date.startsWith(currentMonth) && rec.status === 'Present'
             ).length;
-            empAttendanceThisMonthSpan.textContent = daysPresentThisMonth;
+            if (empAttendanceThisMonthSpan) empAttendanceThisMonthSpan.textContent = daysPresentThisMonth;
 
             // Active Loans/Advances
             const totalActiveLoans = employeeLoans
                 .filter(loan => loan.empId === empId && loan.status === 'Active')
                 .reduce((sum, loan) => sum + (loan.amount - loan.repaid), 0);
-            empActiveLoansSpan.textContent = totalActiveLoans.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            if (empActiveLoansSpan) empActiveLoansSpan.textContent = totalActiveLoans.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         }
 
 
@@ -1974,20 +1943,20 @@
          */
         function updateDashboardInsights() {
             // These are for HR general overview
-            totalEmployeesSpan.textContent = employees.length;
+            if (totalEmployeesSpan) totalEmployeesSpan.textContent = employees.length;
 
             const today = new Date().toISOString().slice(0, 10);
             const presentToday = attendanceRecords.filter(rec => rec.date === today && rec.status === 'Present').length;
-            employeesPresentTodaySpan.textContent = presentToday;
+            if (employeesPresentTodaySpan) employeesPresentTodaySpan.textContent = presentToday;
 
             const pendingLeaves = leaveRequests.filter(req => req.status === 'Pending').length;
-            pendingLeaveRequestsSpan.textContent = pendingLeaves;
+            if (pendingLeaveRequestsSpan) pendingLeaveRequestsSpan.textContent = pendingLeaves;
 
             const currentMonthYear = new Date().toLocaleString('en-US', { month: 'long', year: 'numeric' });
             const totalPayrollThisMonth = payslips
                                             .filter(ps => ps.month === currentMonthYear)
                                             .reduce((sum, ps) => ps.netPay, 0); // Sum of net pays for the month
-            totalPayrollCostSpan.textContent = totalPayrollThisMonth.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            if (totalPayrollCostSpan) totalPayrollCostSpan.textContent = totalPayrollThisMonth.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         }
 
         /**
@@ -2011,122 +1980,132 @@
 
 
             // Attendance Trend (Line Chart)
-            const attendanceCtx = document.getElementById('attendance-chart').getContext('2d');
-            const attendanceDates = [...new Set(attendanceRecords.map(rec => rec.date))].sort().slice(-7); // Last 7 days
-            const attendanceData = attendanceDates.map(date => attendanceRecords.filter(rec => rec.date === date && rec.status === 'Present').length);
-            
-            attendanceChartInstance = new Chart(attendanceCtx, {
-                type: 'line',
-                data: {
-                    labels: attendanceDates,
-                    datasets: [{
-                        label: 'Employees Present',
-                        data: attendanceData,
-                        borderColor: chartColors[0],
-                        backgroundColor: 'rgba(0, 86, 179, 0.2)',
-                        fill: true,
-                        tension: 0.4
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: { 
-                            beginAtZero: true, 
-                            ticks: { precision: 0, color: textColor } 
-                        },
-                        x: {
-                            ticks: { color: textColor }
-                        }
+            const attendanceChartCanvas = document.getElementById('attendance-chart');
+            if (attendanceChartCanvas) {
+                const attendanceCtx = attendanceChartCanvas.getContext('2d');
+                const attendanceDates = [...new Set(attendanceRecords.map(rec => rec.date))].sort().slice(-7); // Last 7 days
+                const attendanceData = attendanceDates.map(date => attendanceRecords.filter(rec => rec.date === date && rec.status === 'Present').length);
+                
+                attendanceChartInstance = new Chart(attendanceCtx, {
+                    type: 'line',
+                    data: {
+                        labels: attendanceDates,
+                        datasets: [{
+                            label: 'Employees Present',
+                            data: attendanceData,
+                            borderColor: chartColors[0],
+                            backgroundColor: 'rgba(0, 86, 179, 0.2)',
+                            fill: true,
+                            tension: 0.4
+                        }]
                     },
-                    plugins: {
-                        title: { display: false },
-                        legend: { 
-                            display: true, 
-                            position: 'bottom',
-                            labels: { color: textColor }
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: { 
+                                beginAtZero: true, 
+                                ticks: { precision: 0, color: textColor } 
+                            },
+                            x: {
+                                ticks: { color: textColor }
+                            }
+                        },
+                        plugins: {
+                            title: { display: false },
+                            legend: { 
+                                display: true, 
+                                position: 'bottom',
+                                labels: { color: textColor }
+                            }
                         }
                     }
-                }
-            });
+                });
+            }
+
 
             // Payroll Expense Distribution (Pie Chart)
-            const payrollPieCtx = document.getElementById('payroll-pie-chart').getContext('2d');
-            const payrollDeductionTypes = ['NHIF', 'NSSF', 'PAYE', 'Other Deductions'];
-            const currentMonthYear = new Date().toLocaleString('en-US', { month: 'long', year: 'numeric' });
-            const currentMonthPayslips = payslips.filter(ps => ps.month === currentMonthYear);
-            
-            let nhifTotal = currentMonthPayslips.reduce((sum, ps) => sum + (ps.nhif || 0), 0);
-            let nssfTotal = currentMonthPayslips.reduce((sum, ps) => sum + (ps.nssf || 0), 0);
-            let payeTotal = currentMonthPayslips.reduce((sum, ps) => sum + (ps.paye || 0), 0);
-            let otherDeductionsTotal = currentMonthPayslips.reduce((sum, ps) => sum + (ps.otherDeductions || 0), 0);
+            const payrollPieChartCanvas = document.getElementById('payroll-pie-chart');
+            if (payrollPieChartCanvas) {
+                const payrollPieCtx = payrollPieChartCanvas.getContext('2d');
+                const payrollDeductionTypes = ['NHIF', 'NSSF', 'PAYE', 'Other Deductions'];
+                const currentMonthYear = new Date().toLocaleString('en-US', { month: 'long', year: 'numeric' });
+                const currentMonthPayslips = payslips.filter(ps => ps.month === currentMonthYear);
+                
+                let nhifTotal = currentMonthPayslips.reduce((sum, ps) => sum + (ps.nhif || 0), 0);
+                let nssfTotal = currentMonthPayslips.reduce((sum, ps) => sum + (ps.nssf || 0), 0);
+                let payeTotal = currentMonthPayslips.reduce((sum, ps) => sum + (ps.paye || 0), 0);
+                let otherDeductionsTotal = currentMonthPayslips.reduce((sum, ps) => sum + (ps.otherDeductions || 0), 0);
 
-            let payrollPieData = [nhifTotal, nssfTotal, payeTotal, otherDeductionsTotal];
+                let payrollPieData = [nhifTotal, nssfTotal, payeTotal, otherDeductionsTotal];
 
-            payrollPieChartInstance = new Chart(payrollPieCtx, {
-                type: 'pie',
-                data: {
-                    labels: payrollDeductionTypes,
-                    datasets: [{
-                        data: payrollPieData,
-                        backgroundColor: [chartColors[0], chartColors[1], chartColors[2], chartColors[3]],
-                        hoverOffset: 4
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        title: { display: false },
-                        legend: { 
-                            display: true, 
-                            position: 'bottom',
-                            labels: { color: textColor }
+                payrollPieChartInstance = new Chart(payrollPieCtx, {
+                    type: 'pie',
+                    data: {
+                        labels: payrollDeductionTypes,
+                        datasets: [{
+                            data: payrollPieData,
+                            backgroundColor: [chartColors[0], chartColors[1], chartColors[2], chartColors[3]],
+                            hoverOffset: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            title: { display: false },
+                            legend: { 
+                                display: true, 
+                                position: 'bottom',
+                                labels: { color: textColor }
+                            }
                         }
                     }
-                }
-            });
+                });
+            }
 
             // Leave Types Breakdown (Bar Chart)
-            const leaveBarCtx = document.getElementById('leave-bar-chart').getContext('2d');
-            const leaveTypeCounts = leaveRequests.reduce((acc, req) => {
-                acc[req.type] = (acc[req.type] || 0) + 1;
-                return acc;
-            }, {});
-            const leaveLabels = Object.keys(leaveTypeCounts);
-            const leaveData = Object.values(leaveTypeCounts);
+            const leaveBarChartCanvas = document.getElementById('leave-bar-chart');
+            if (leaveBarChartCanvas) {
+                const leaveBarCtx = leaveBarChartCanvas.getContext('2d');
+                const leaveTypeCounts = leaveRequests.reduce((acc, req) => {
+                    acc[req.type] = (acc[req.type] || 0) + 1;
+                    return acc;
+                }, {});
+                const leaveLabels = Object.keys(leaveTypeCounts);
+                const leaveData = Object.values(leaveTypeCounts);
 
-            leaveBarChartInstance = new Chart(leaveBarCtx, {
-                type: 'bar',
-                data: {
-                    labels: leaveLabels,
-                    datasets: [{
-                        label: 'Number of Requests',
-                        data: leaveData,
-                        backgroundColor: chartColors.slice(0, leaveLabels.length),
-                        borderColor: chartColors.slice(0, leaveLabels.length),
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: { 
-                            beginAtZero: true, 
-                            ticks: { precision: 0, color: textColor } 
-                        },
-                        x: {
-                            ticks: { color: textColor }
-                        }
+                leaveBarChartInstance = new Chart(leaveBarCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: leaveLabels,
+                        datasets: [{
+                            label: 'Number of Requests',
+                            data: leaveData,
+                            backgroundColor: chartColors.slice(0, leaveLabels.length),
+                            borderColor: chartColors.slice(0, leaveLabels.length),
+                            borderWidth: 1
+                        }]
                     },
-                    plugins: {
-                        title: { display: false },
-                        legend: { display: false }
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: { 
+                                beginAtZero: true, 
+                                ticks: { precision: 0, color: textColor } 
+                            },
+                            x: {
+                                ticks: { color: textColor }
+                            }
+                        },
+                        plugins: {
+                            title: { display: false },
+                            legend: { display: false }
+                        }
                     }
-                }
-            });
+                });
+            }
         }
 
 
@@ -2137,6 +2116,8 @@
          * Applies filters if provided.
          */
         function populateEmployeeTable() {
+            if (!employeesTableBody) return; // Ensure element exists
+
             employeesTableBody.innerHTML = ''; // Clear existing data
             const searchName = searchEmployeeNameInput.value.toLowerCase();
             const filterDept = filterDepartmentInput.value.toLowerCase();
@@ -2176,6 +2157,8 @@
          * @param {string|null} empId - The ID of the employee to edit, or null for adding a new employee.
          */
         function openEmployeeModal(empId = null) {
+            if (!employeeForm || !employeeModalTitle || !employeeIdField || !employeeModal) return; // Ensure elements exist
+
             employeeForm.reset(); // Clear previous form data
             employeeIdField.value = ''; // Clear hidden ID field
 
@@ -2210,15 +2193,17 @@
          * Closes the employee add/edit modal.
          */
         function closeEmployeeModal() {
-            employeeModal.classList.remove('visible');
+            employeeModal?.classList.remove('visible');
         }
 
         /**
          * Handles the submission of the employee form (add or edit).
          * @param {Event} e - The form submission event.
          */
-        employeeForm.addEventListener('submit', (e) => {
+        employeeForm?.addEventListener('submit', (e) => {
             e.preventDefault();
+
+            if (!employeeForm || !employeeIdField) return; // Ensure elements exist
 
             // Basic form validation for non-empty fields
             const requiredFields = employeeForm.querySelectorAll('[required]');
@@ -2234,13 +2219,14 @@
 
             // Validate salary as a positive number
             const salaryInput = document.getElementById('modal-emp-salary');
-            if (parseFloat(salaryInput.value) <= 0 || isNaN(parseFloat(salaryInput.value))) {
-                salaryInput.style.borderColor = 'red';
-                allFieldsValid = false;
-            } else {
-                 salaryInput.style.borderColor = '';
+            if (salaryInput) {
+                if (parseFloat(salaryInput.value) <= 0 || isNaN(parseFloat(salaryInput.value))) {
+                    salaryInput.style.borderColor = 'red';
+                    allFieldsValid = false;
+                } else {
+                    salaryInput.style.borderColor = '';
+                }
             }
-
 
             if (!allFieldsValid) {
                 showMessage('Validation Error', 'Please fill in all required fields and ensure salary is a valid positive number.');
@@ -2250,19 +2236,19 @@
 
             const empId = employeeIdField.value;
             const employeeData = {
-                name: document.getElementById('modal-emp-name').value,
-                dob: document.getElementById('modal-emp-dob').value,
-                gender: document.getElementById('modal-emp-gender').value,
-                contact: document.getElementById('modal-emp-contact').value,
-                nationalId: document.getElementById('modal-emp-id').value,
-                kraPin: document.getElementById('modal-emp-kra').value,
-                nhif: document.getElementById('modal-emp-nhif').value,
-                nssf: document.getElementById('modal-emp-nssf').value,
-                department: document.getElementById('modal-emp-department').value,
-                designation: document.getElementById('modal-emp-designation').value,
-                hireDate: document.getElementById('modal-emp-hiredate').value,
-                salary: parseFloat(document.getElementById('modal-emp-salary').value),
-                status: document.getElementById('modal-emp-status').value
+                name: document.getElementById('modal-emp-name')?.value,
+                dob: document.getElementById('modal-emp-dob')?.value,
+                gender: document.getElementById('modal-emp-gender')?.value,
+                contact: document.getElementById('modal-emp-contact')?.value,
+                nationalId: document.getElementById('modal-emp-id')?.value,
+                kraPin: document.getElementById('modal-emp-kra')?.value,
+                nhif: document.getElementById('modal-emp-nhif')?.value,
+                nssf: document.getElementById('modal-emp-nssf')?.value,
+                department: document.getElementById('modal-emp-department')?.value,
+                designation: document.getElementById('modal-emp-designation')?.value,
+                hireDate: document.getElementById('modal-emp-hiredate')?.value,
+                salary: parseFloat(document.getElementById('modal-emp-salary')?.value || '0'),
+                status: document.getElementById('modal-emp-status')?.value
             };
 
             if (empId) {
@@ -2305,9 +2291,9 @@
         }
 
         // Filters event listeners for employee table
-        searchEmployeeNameInput.addEventListener('input', populateEmployeeTable);
-        filterDepartmentInput.addEventListener('input', populateEmployeeTable);
-        filterStatusSelect.addEventListener('change', populateEmployeeTable);
+        searchEmployeeNameInput?.addEventListener('input', populateEmployeeTable);
+        filterDepartmentInput?.addEventListener('input', populateEmployeeTable);
+        filterStatusSelect?.addEventListener('change', populateEmployeeTable);
 
         // --- Attendance Functions (Shared) ---
 
@@ -2367,23 +2353,23 @@
             }
             
             if (statusForToday.checkedIn && statusForToday.checkedOut) {
-                todayAttendanceStatusSpan.textContent = 'Checked In & Out';
-                currentCheckInTimeDisplay.textContent = statusForToday.checkInTime;
-                currentCheckOutTimeDisplay.textContent = statusForToday.checkOutTime;
+                if (todayAttendanceStatusSpan) todayAttendanceStatusSpan.textContent = 'Checked In & Out';
+                if (currentCheckInTimeDisplay) currentCheckInTimeDisplay.textContent = statusForToday.checkInTime;
+                if (currentCheckOutTimeDisplay) currentCheckOutTimeDisplay.textContent = statusForToday.checkOutTime;
             } else if (statusForToday.checkedIn) {
-                todayAttendanceStatusSpan.textContent = 'Checked In';
-                currentCheckInTimeDisplay.textContent = statusForToday.checkInTime;
-                currentCheckOutTimeDisplay.textContent = '-';
+                if (todayAttendanceStatusSpan) todayAttendanceStatusSpan.textContent = 'Checked In';
+                if (currentCheckInTimeDisplay) currentCheckInTimeDisplay.textContent = statusForToday.checkInTime;
+                if (currentCheckOutTimeDisplay) currentCheckOutTimeDisplay.textContent = '-';
             } else {
-                todayAttendanceStatusSpan.textContent = 'Not Checked In';
-                currentCheckInTimeDisplay.textContent = '-';
-                currentCheckOutTimeDisplay.textContent = '-';
+                if (todayAttendanceStatusSpan) todayAttendanceStatusSpan.textContent = 'Not Checked In';
+                if (currentCheckInTimeDisplay) currentCheckInTimeDisplay.textContent = '-';
+                if (currentCheckOutTimeDisplay) currentCheckOutTimeDisplay.textContent = '-';
             }
 
             // Update lateness/overtime display from current day's record if available
             const todayRecord = attendanceRecords.find(rec => rec.empId === empId && rec.date === today);
-            overtimeHoursSpan.textContent = todayRecord?.overtime ? `${todayRecord.overtime} hrs` : '0 hrs';
-            latenessMinutesSpan.textContent = todayRecord?.lateness ? `${todayRecord.lateness} min` : '0 min';
+            if (overtimeHoursSpan) overtimeHoursSpan.textContent = todayRecord?.overtime ? `${todayRecord.overtime} hrs` : '0 hrs';
+            if (latenessMinutesSpan) latenessMinutesSpan.textContent = todayRecord?.lateness ? `${todayRecord.lateness} min` : '0 min';
         }
 
         /**
@@ -2391,6 +2377,8 @@
          * @param {string} empId - The ID of the employee.
          */
         function populateAttendanceHistoryTable(empId) {
+            if (!attendanceHistoryTableBody) return; // Ensure element exists
+
             attendanceHistoryTableBody.innerHTML = '';
             const employeeAttendance = attendanceRecords.filter(rec => rec.empId === empId);
             if (employeeAttendance.length === 0) {
@@ -2517,15 +2505,17 @@
          */
         function populateEmployeeLeaveBalances(empId) {
             // This would fetch actual balances from a backend. For now, static dummy.
-            annualLeaveBalanceSpan.textContent = '15';
-            sickLeaveBalanceSpan.textContent = '7';
-            maternityLeaveBalanceSpan.textContent = '90';
+            if (annualLeaveBalanceSpan) annualLeaveBalanceSpan.textContent = '15';
+            if (sickLeaveBalanceSpan) sickLeaveBalanceSpan.textContent = '7';
+            if (maternityLeaveBalanceSpan) maternityLeaveBalanceSpan.textContent = '90';
         }
 
         /**
          * Populates the HR's view of pending leave requests.
          */
         function populateHRLeaveTable() {
+            if (!leaveRequestsTableBody) return; // Ensure element exists
+
             leaveRequestsTableBody.innerHTML = '';
             const hrViewRequests = leaveRequests.filter(req => req.status === 'Pending' || req.status === 'Approved' || req.status === 'Rejected');
             if (hrViewRequests.length === 0) {
@@ -2555,6 +2545,8 @@
          * @param {string} empId - The ID of the employee.
          */
         function populateMyLeaveHistoryTable(empId) {
+            if (!myLeaveHistoryTableBody) return; // Ensure element exists
+
             myLeaveHistoryTableBody.innerHTML = '';
             const employeeLeaveHistory = leaveRequests.filter(req => req.empId === empId);
             if (employeeLeaveHistory.length === 0) {
@@ -2613,18 +2605,18 @@
          * Handles employee leave request submission.
          * @param {Event} e - The form submission event.
          */
-        leaveRequestForm.addEventListener('submit', (e) => {
+        leaveRequestForm?.addEventListener('submit', (e) => {
             e.preventDefault();
-            const leaveType = document.getElementById('leave-type').value;
-            const startDate = document.getElementById('leave-start-date').value;
-            const endDate = document.getElementById('leave-end-date').value;
-            const leaveReason = document.getElementById('leave-reason').value;
+            const leaveType = document.getElementById('leave-type')?.value;
+            const startDate = document.getElementById('leave-start-date')?.value;
+            const endDate = document.getElementById('leave-end-date')?.value;
+            const leaveReason = document.getElementById('leave-reason')?.value;
 
             if (!leaveType) { showMessage('Validation Error', 'Please select a leave type.'); return; }
-            if (new Date(startDate) > new Date(endDate)) { showMessage('Validation Error', 'Start date cannot be after end date.'); return; }
+            if (startDate && endDate && new Date(startDate) > new Date(endDate)) { showMessage('Validation Error', 'Start date cannot be after end date.'); return; }
 
             // Check if required fields are filled
-            if (!startDate.trim() || !endDate.trim() || !leaveReason.trim()) {
+            if (!startDate?.trim() || !endDate?.trim() || !leaveReason?.trim()) {
                 showMessage('Validation Error', 'Please fill in all required leave request fields.');
                 return;
             }
@@ -2660,6 +2652,8 @@
          * @param {string} [empId] - Optional employee ID to filter for individual payslips.
          */
         function populatePayrollSummaryTable(empId = null) {
+            if (!payrollSummaryTableBody || !filterPayrollMonthInput) return; // Ensure elements exist
+
             payrollSummaryTableBody.innerHTML = '';
             const filterMonthValue = filterPayrollMonthInput.value; // YYYY-MM format
 
@@ -2696,7 +2690,9 @@
         /**
          * Simulates monthly payroll processing for HR.
          */
-        processPayrollBtn.addEventListener('click', () => {
+        processPayrollBtn?.addEventListener('click', () => {
+            if (!payrollMonthInput || !payrollStatus) return; // Ensure elements exist
+
             const selectedMonth = payrollMonthInput.value; // YYYY-MM format
             if (!selectedMonth) {
                 showMessage('Validation Error', 'Please select a month for payroll processing.');
@@ -2776,13 +2772,13 @@
                 if (processedCount > 0) {
                     saveData('payslips', payslips); // Save to LocalStorage
                     saveData('lastProcessedPayrollMonth', payrollDateFormatted); // Save last processed month
-                    payrollStatus.textContent = `Payroll processed successfully for ${payrollDateFormatted}. Payslips generated.`;
+                    if (payrollStatus) payrollStatus.textContent = `Payroll processed successfully for ${payrollDateFormatted}. Payslips generated.`;
                     showMessage('Payroll Success', `Monthly payroll for ${payrollDateFormatted} has been calculated and payslips are generated for ${processedCount} employees.`);
                     populatePayrollSummaryTable(); // Re-render table
                     updateDashboardInsights(); // Update dashboard
                     addNotification(`Monthly Payroll for ${payrollDateFormatted} processed.`, 'payroll');
                 } else {
-                    payrollStatus.textContent = `No active employees to process payroll for ${payrollDateFormatted}.`;
+                    if (payrollStatus) payrollStatus.textContent = `No active employees to process payroll for ${payrollDateFormatted}.`;
                     showMessage('Payroll Info', `No active employees found to process payroll for ${payrollDateFormatted}.`);
                 }
                 // Simulate notifications (Email/WhatsApp/SMS alerts: Payslip ready. Payroll processed.)
@@ -2791,7 +2787,7 @@
         });
 
         // Event listener for payroll month filter
-        filterPayrollMonthInput.addEventListener('change', () => populatePayrollSummaryTable(currentUser.role === 'employee' ? currentUser.empId : null));
+        filterPayrollMonthInput?.addEventListener('change', () => populatePayrollSummaryTable(currentUser.role === 'employee' ? currentUser.empId : null));
 
         /**
          * Dynamically populates the hidden payslip template with data and generates a PDF.
@@ -2799,6 +2795,14 @@
          * @param {string} empId - The employee ID.
          */
         function downloadPayslip(month, empId) {
+            if (!payslipTemplate || !payslipMonth || !payslipEmployeeName || !payslipEmployeeId || !payslipDepartment || !payslipPosition || !payslipPayrollNumber ||
+                !payslipBasicSalary || !payslipHouseAllowance || !payslipTransportAllowance || !payslipMedicalAllowance || !payslipOvertime ||
+                !payslipPaye || !payslipNhif || !payslipNssf || !payslipLoan || !payslipOtherDeductions ||
+                !payslipGrossPay || !payslipTotalDeductions || !payslipNetPay) {
+                showMessage('Error', 'Required payslip elements not found in the DOM.');
+                return;
+            }
+
             const payslipData = payslips.find(ps => ps.month === month && ps.empId === empId);
             const employeeData = employees.find(emp => emp.id === empId);
 
@@ -2872,18 +2876,18 @@
                 return;
             }
 
-            profileName.value = employee.name;
-            profileDob.value = employee.dob;
-            profileGender.value = employee.gender;
-            profileContact.value = employee.contact;
-            profileNationalId.value = employee.nationalId;
-            profileKra.value = employee.kraPin;
-            profileNhif.value = employee.nhif;
-            profileNssf.value = employee.nssf;
-            profileDepartment.value = employee.department;
-            profileDesignation.value = employee.designation;
-            profileHireDate.value = employee.hireDate;
-            profileStatus.value = employee.status;
+            if (profileName) profileName.value = employee.name;
+            if (profileDob) profileDob.value = employee.dob;
+            if (profileGender) profileGender.value = employee.gender;
+            if (profileContact) profileContact.value = employee.contact;
+            if (profileNationalId) profileNationalId.value = employee.nationalId;
+            if (profileKra) profileKra.value = employee.kraPin;
+            if (profileNhif) profileNhif.value = employee.nhif;
+            if (profileNssf) profileNssf.value = employee.nssf;
+            if (profileDepartment) profileDepartment.value = employee.department;
+            if (profileDesignation) profileDesignation.value = employee.designation;
+            if (profileHireDate) profileHireDate.value = employee.hireDate;
+            if (profileStatus) profileStatus.value = employee.status;
 
             // Make fields editable if they are intended to be updated by employee
             document.querySelectorAll('#profile-section .editable-field').forEach(field => {
@@ -2905,7 +2909,7 @@
             }
 
             // Update only editable fields
-            employees[employeeIndex].contact = profileContact.value;
+            if (profileContact) employees[employeeIndex].contact = profileContact.value;
             // Add other editable fields here if any, e.g., address if added to schema
 
             saveData('employees', employees);
@@ -2922,16 +2926,16 @@
          * Updated: Now allows login based on selected role only, ignoring username/password.
          * @param {Event} e - The form submission event.
          */
-        loginForm.addEventListener('submit', (e) => {
+        loginForm?.addEventListener('submit', (e) => {
             e.preventDefault();
-            const role = document.getElementById('user-role').value;
-            const username = document.getElementById('username').value || role; // Use role as default username
+            const role = document.getElementById('user-role')?.value;
+            const username = document.getElementById('username')?.value || role; // Use role as default username
 
             if (role && role !== "") { // Ensure a role is selected
                 // For employee, default to EMP002 (Mwangi Kimani), for HR, set empId to null
                 currentUser = { role: role, username: username, empId: (role === 'employee' ? 'EMP002' : null) }; 
-                loginContainer.classList.add('hidden');
-                appLayout.classList.remove('hidden'); // Show the main app layout
+                loginContainer?.classList.add('hidden');
+                appLayout?.classList.remove('hidden'); // Show the main app layout
                 
                 // Populate sidebar based on role
                 populateSidebar(role);
@@ -2945,7 +2949,7 @@
 
                 // Show sidebar toggle button on small screens after login
                 if (window.innerWidth <= 768) {
-                    sidebarToggleBtn.classList.remove('hidden');
+                    sidebarToggleBtn?.classList.remove('hidden');
                 }
 
             } else {
@@ -2958,50 +2962,50 @@
         /**
          * Handles the logout button click.
          */
-        logoutBtn.addEventListener('click', () => {
+        logoutBtn?.addEventListener('click', () => {
             currentUser = null; // Clear current user
-            appLayout.classList.add('hidden'); // Hide the main app layout
-            loginContainer.classList.remove('hidden'); // Show login screen
-            loginForm.reset(); // Clear login form fields
+            appLayout?.classList.add('hidden'); // Hide the main app layout
+            loginContainer?.classList.remove('hidden'); // Show login screen
+            loginForm?.reset(); // Clear login form fields
             showMessage('Logged Out', 'You have been successfully logged out.');
             
             // Hide sidebar toggle button and sidebar on logout
-            sidebarToggleBtn.classList.add('hidden');
-            sidebar.classList.remove('visible');
-            contentOverlay.classList.add('hidden');
+            sidebarToggleBtn?.classList.add('hidden');
+            sidebar?.classList.remove('visible');
+            contentOverlay?.classList.add('hidden');
         });
 
         // Initialize modal's OK button listener
-        modalOkBtn.addEventListener('click', () => {
-            messageModal.classList.remove('visible');
+        modalOkBtn?.addEventListener('click', () => {
+            messageModal?.classList.remove('visible');
         });
 
         // Sidebar toggle for mobile
-        sidebarToggleBtn.addEventListener('click', () => {
-            sidebar.classList.toggle('visible');
-            contentOverlay.classList.toggle('hidden');
+        sidebarToggleBtn?.addEventListener('click', () => {
+            sidebar?.classList.toggle('visible');
+            contentOverlay?.classList.toggle('hidden');
         });
 
-        contentOverlay.addEventListener('click', () => {
-            sidebar.classList.remove('visible');
-            contentOverlay.classList.add('hidden');
+        contentOverlay?.addEventListener('click', () => {
+            sidebar?.classList.remove('visible');
+            contentOverlay?.classList.add('hidden');
         });
 
         // Profile Dropdown Toggle
-        profileDropdownBtn.addEventListener('click', (event) => {
+        profileDropdownBtn?.addEventListener('click', (event) => {
             event.stopPropagation(); // Prevent document click from immediately closing
-            profileDropdown.classList.toggle('open');
+            profileDropdown?.classList.toggle('open');
         });
 
         // Close profile dropdown if clicking outside
         document.addEventListener('click', (event) => {
-            if (!profileDropdown.contains(event.target)) {
+            if (profileDropdown && !profileDropdown.contains(event.target)) {
                 profileDropdown.classList.remove('open');
             }
         });
 
         // Dark Mode Toggle
-        darkModeToggleBtn.addEventListener('click', () => {
+        darkModeToggleBtn?.addEventListener('click', () => {
             document.body.classList.toggle('dark-mode');
             const isDarkMode = document.body.classList.contains('dark-mode');
             localStorage.setItem('dark-mode', isDarkMode ? 'enabled' : 'disabled');
@@ -3009,7 +3013,7 @@
             if (attendanceChartInstance) attendanceChartInstance.update();
             if (payrollPieChartInstance) payrollPieChartInstance.update();
             if (leaveBarChartInstance) leaveBarChartInstance.update();
-            darkModeToggleBtn.innerHTML = isDarkMode ? '<i class="fas fa-sun"></i> Light Mode' : '<i class="fas fa-moon"></i> Dark Mode';
+            if (darkModeToggleBtn) darkModeToggleBtn.innerHTML = isDarkMode ? '<i class="fas fa-sun"></i> Light Mode' : '<i class="fas fa-moon"></i> Dark Mode';
         });
 
         // Check for dark mode preference on load
@@ -3017,9 +3021,9 @@
             const darkModePreference = localStorage.getItem('dark-mode');
             if (darkModePreference === 'enabled') {
                 document.body.classList.add('dark-mode');
-                darkModeToggleBtn.innerHTML = '<i class="fas fa-sun"></i> Light Mode';
+                if (darkModeToggleBtn) darkModeToggleBtn.innerHTML = '<i class="fas fa-sun"></i> Light Mode';
             } else {
-                darkModeToggleBtn.innerHTML = '<i class="fas fa-moon"></i> Dark Mode';
+                if (darkModeToggleBtn) darkModeToggleBtn.innerHTML = '<i class="fas fa-moon"></i> Dark Mode';
             }
         }
         loadDarkModePreference();
@@ -3028,21 +3032,20 @@
         // Adjust sidebar visibility on window resize
         window.addEventListener('resize', () => {
             if (window.innerWidth > 768) {
-                sidebar.classList.remove('visible');
-                contentOverlay.classList.add('hidden');
-                sidebarToggleBtn.classList.add('hidden'); // Ensure hidden on desktop
+                sidebar?.classList.remove('visible');
+                contentOverlay?.classList.add('hidden');
+                sidebarToggleBtn?.classList.add('hidden'); // Ensure hidden on desktop
             } else if (currentUser) {
-                sidebarToggleBtn.classList.remove('hidden'); // Show if logged in on mobile
+                sidebarToggleBtn?.classList.remove('hidden'); // Show if logged in on mobile
             }
         });
 
         // Set initial values for payroll month inputs
         const todayMonth = new Date().toISOString().slice(0, 7); // YYYY-MM
-        payrollMonthInput.value = todayMonth;
-        filterPayrollMonthInput.value = todayMonth;
+        if (payrollMonthInput) payrollMonthInput.value = todayMonth;
+        if (filterPayrollMonthInput) filterPayrollMonthInput.value = todayMonth;
 
     </script>
 
 </body>
 </html>
-
