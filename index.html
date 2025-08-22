@@ -50,6 +50,7 @@
             display: flex; /* Use flexbox for main layout */
             min-height: 100vh; /* Ensure body takes full viewport height */
             transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition for dark mode */
+            overflow-y: auto; /* Ensure body is the scroll container for the sticky header */
         }
 
         /* Sidebar styles */
@@ -112,9 +113,8 @@
         /* Content area styles */
         .content-area {
             margin-left: 250px;       /* Push content so it doesn’t overlap */
-            padding: 2rem;
             flex-grow: 1;
-            overflow-y: auto;
+            /* Removed overflow-y: auto; to allow body to scroll */
             background-color: var(--background-light);
             min-height: 100vh;
             transition: margin-left 0.3s ease-in-out, background-color 0.3s ease; /* Smooth transition for mobile and dark mode */
@@ -122,8 +122,8 @@
         
         /* Header inside content */
         header {
-            position: sticky;
-            top: 0;
+            position: sticky; /* Already sticky */
+            top: 0; /* Stick to the top of the viewport */
             background-color: var(--primary-blue);
             color: white;
             padding: 1rem 2rem;
@@ -234,7 +234,7 @@
         .content-area main { /* Targeting the <main> element within .content-area */
             max-width: 1200px; /* Adjust as needed for desired content width */
             margin: 0 auto; /* Center the main content */
-            padding-top: 0; /* Header already handles spacing */
+            padding: 2rem; /* Add padding here as content-area no longer has it */
         }
 
         /* Card component styling */
@@ -668,7 +668,10 @@
             }
             .content-area {
                 margin-left: 0; /* Content takes full width on mobile */
-                padding: 1rem;
+                /* Removed padding here */
+            }
+            .content-area main {
+                padding: 1rem; /* Add padding to main content on mobile */
             }
             header {
                 flex-direction: column;
@@ -846,7 +849,6 @@
         <form id="login-form">
             <select id="user-role" required>
                 <option value="">Select Role</option>
-                <!-- Removed Admin role option -->
                 <option value="hr">HR Manager</option>
                 <option value="employee">Employee</option>
             </select>
@@ -896,8 +898,9 @@
                     <p>Welcome to your HR & Payroll Dashboard, <span id="current-user-name"></span>!</p>
 
                     <h3 class="section-header">Quick Insights</h3>
+                    
+                    <!-- Employee-specific Quick Insights -->
                     <div class="info-grid" id="employee-dashboard-insights">
-                        <!-- Employee-specific quick stats will go here -->
                         <div class="info-card">
                             <h3>Leave Balance</h3>
                             <p><span id="emp-leave-balance">0</span> days left</p>
@@ -913,6 +916,26 @@
                         <div class="info-card">
                             <h3>Active Loans/Advances</h3>
                             <p>Ksh <span id="emp-active-loans">0.00</span></p>
+                        </div>
+                    </div>
+
+                    <!-- HR/Admin Specific Quick Insights -->
+                    <div class="info-grid hidden" id="hr-dashboard-insights">
+                        <div class="info-card">
+                            <h3>Total Employees</h3>
+                            <p><span id="total-employees">0</span></p>
+                        </div>
+                        <div class="info-card">
+                            <h3>Present Today</h3>
+                            <p><span id="employees-present-today">0</span></p>
+                        </div>
+                        <div class="info-card">
+                            <h3>Pending Leave Requests</h3>
+                            <p><span id="pending-leave-requests">0</span></p>
+                        </div>
+                        <div class="info-card">
+                            <h3>Total Payroll Cost (This Month)</h3>
+                            <p>Ksh <span id="total-payroll-cost">0.00</span></p>
                         </div>
                     </div>
 
@@ -965,7 +988,7 @@
                             <input type="text" id="profile-gender" readonly>
                         </div>
                         <div class="form-group">
-                            <label>Contact (Phone/Email):</label>
+                            <label for="profile-contact">Contact (Phone/Email):</label>
                             <input type="text" id="profile-contact" class="editable-field">
                         </div>
                         <div class="form-group">
@@ -1794,11 +1817,13 @@
             document.getElementById('reports-section').classList.add('hidden');
             document.getElementById('integrations-section').classList.add('hidden');
 
-            // Hide/show dashboard insight grids
+            // Hide both insight grids by default
             document.getElementById('employee-dashboard-insights').classList.add('hidden');
-            // Re-use existing spans for admin/hr insights in dashboard-section HTML.
-            // These would ideally be in a separate container for clear separation, but for now, we'll hide them.
-            document.getElementById('dashboard-section').querySelectorAll('.info-card').forEach(card => card.classList.add('hidden'));
+            document.getElementById('hr-dashboard-insights').classList.add('hidden');
+            
+            // Hide dashboard charts section by default
+            document.getElementById('dashboard-section').querySelector('h3.section-header:last-of-type').classList.add('hidden');
+            document.getElementById('dashboard-section').querySelector('.info-grid:last-of-type').classList.add('hidden');
 
 
             // Leave section specific toggles
@@ -1820,14 +1845,13 @@
                     document.getElementById('integrations-section').classList.remove('hidden'); // HR/Admin can see integrations
                     document.getElementById('notifications-section').classList.remove('hidden'); // HR/Admin see all notifications
 
-                    // Show HR/Admin specific dashboard insights
+                    // Show HR/Admin specific dashboard insights and charts
                     if (sectionId === 'dashboard-section') {
-                        // Show all 4 HR/Admin insight cards
-                        totalEmployeesSpan.closest('.info-card')?.classList.remove('hidden');
-                        employeesPresentTodaySpan.closest('.info-card')?.classList.remove('hidden');
-                        pendingLeaveRequestsSpan.closest('.info-card')?.classList.remove('hidden');
-                        totalPayrollCostSpan.closest('.info-card')?.classList.remove('hidden');
+                        document.getElementById('hr-dashboard-insights').classList.remove('hidden'); // Show HR insights
                         updateDashboardInsights(); // Populate with data
+                        document.getElementById('dashboard-section').querySelector('h3.section-header:last-of-type').classList.remove('hidden'); // Show Analytics & Trends header
+                        document.getElementById('dashboard-section').querySelector('.info-grid:last-of-type').classList.remove('hidden'); // Show Charts grid
+                        renderCharts(); // Render charts for HR/Admin dashboard
                     }
                     
                     // Show HR specific leave sections
@@ -1864,8 +1888,6 @@
 
                     document.getElementById('leave-balances-title').textContent = 'All Leave Balances'; // HR/Admin sees all
                     document.getElementById('apply-leave-title').textContent = 'Manage Leave Requests'; // HR/Admin manages
-
-                    renderCharts(); // Render charts for HR/Admin dashboard
                     break;
 
                 case 'employee':
@@ -1877,14 +1899,8 @@
 
                     // Show employee-specific dashboard insights
                     if (sectionId === 'dashboard-section') {
-                         document.getElementById('employee-dashboard-insights').classList.remove('hidden');
-                         // Show employee specific insight cards (assumes they are children of employee-dashboard-insights)
-                         document.getElementById('employee-dashboard-insights').querySelectorAll('.info-card').forEach(card => card.classList.remove('hidden'));
+                         document.getElementById('employee-dashboard-insights').classList.remove('hidden'); // Show employee insights
                          updateEmployeeDashboardInsights(currentUser.empId); // Populate employee dashboard cards
-                         // Hide the Charts section from employee dashboard
-                         document.getElementById('dashboard-section').querySelector('h3.section-header:last-of-type').classList.add('hidden');
-                         document.getElementById('dashboard-section').querySelector('.info-grid:last-of-type').classList.add('hidden');
-
                     } else if (sectionId === 'notifications-section') {
                         document.getElementById('notifications-section').classList.remove('hidden');
                         renderNotifications(); // Ensure notifications are rendered for employee
